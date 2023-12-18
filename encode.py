@@ -11,16 +11,16 @@ def class_mapping(row):
             return value
     return 0  # If no mapping is found, return 0
 # データの読み込み
-yearStart = 2020
+yearStart = 2023
 yearEnd = 2023
 yearList = np.arange(yearStart, yearEnd + 1, 1, int)
 df = []
 print("ファイル取得：開始")
 for for_year in yearList:
-    var_path = "data/" + str(for_year) + "_new.csv"
+    var_path = "data/" + str(for_year) + ".csv"
     var_data = pd.read_csv(
         var_path,
-        encoding="SHIFT-JIS",
+        encoding="utf-8",
         header=0,
         dtype={0: str, 3: int, 7: int, 8: int, 9: int, 11: int, 12: float, 13: float, 14: str, 20: int, 24: int},
         parse_dates=['日付'], 
