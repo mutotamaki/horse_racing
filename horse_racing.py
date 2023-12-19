@@ -186,6 +186,6 @@ for w in range(len(l)):
                 break
 #1年毎に出力
 #出力先とファイル名は修正してください
-with open('data/'+str(year)+'.csv', 'w', newline='',encoding="SHIFT-JIS") as f:
+with open('data/'+str(year)+'.csv', 'w', newline='',encoding="utf-8") as f:
     csv.writer(f).writerows(race_data_all)
 print("終了")
