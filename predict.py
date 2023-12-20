@@ -7,7 +7,7 @@ yearEnd = 2022
 
 # 予測を行う新しいデータの読み込み
 file_name = 'arima'
-new_data = pd.read_csv(file_name + '.csv')
+new_data = pd.read_csv( file_name + '.csv')
 
 #人気、オッズを退避
 pop = new_data['人気']
@@ -65,11 +65,26 @@ new_data.drop(['year', 'month', 'day'], axis=1, inplace=True)
 
 # カテゴリカル変数のエンコーディング
 categorical_features = ['馬', '騎手', 'レース名','場名','開催', '騎手1', '騎手2', '騎手3', '騎手4', '騎手5']  # カテゴリカル変数の列名を指定してください
+encoding_dict = {}
 
 # ラベルエンコーディング
 for i, feature in enumerate(categorical_features):
     print(f"\rProcessing feature {i+1}/{len(categorical_features)}", end="")
     le = LabelEncoder()
+    # LabelEncoderの辞書を作成
+    
+    for feature in categorical_features:
+        le = LabelEncoder()
+        new_data[feature] = le.fit_transform(new_data[feature])
+        encoding_dict[feature] = {label: encoding for label, encoding in zip(le.classes_, le.transform(le.classes_))}
+
+    # エンコーディング辞書をテキストファイルに書き出す
+    with open('encoding.txt', 'w') as f:
+        for feature, encoding_map in encoding_dict.items():
+            f.write(f"{feature}:\n")
+            for label, encoding in encoding_map.items():
+                f.write(f"  {label}: {encoding}\n")
+
     new_data[feature] = le.fit_transform(new_data[feature])
 
 
@@ -90,4 +105,4 @@ new_data.insert(3, '人気', pop)
 new_data.insert(4, 'オッズ', odds)
 
 # Save prediction
-new_data.to_csv('predict_result/' + file_name + '.csv', index=False)
+new_data.to_csv('predict_result/' + 'predict_result_' + file_name + '.csv', index=False)
