@@ -193,7 +193,23 @@ categorical_features = ['馬', '騎手', 'レース名', '開催', '場名', '�
 for i, feature in enumerate(categorical_features):
     print(f"\rProcessing feature {i+1}/{len(categorical_features)}", end="")
     le = LabelEncoder()
+    # LabelEncoderの辞書を作成
+    encoding_dict = {}
+    for feature in categorical_features:
+        le = LabelEncoder()
+        df_combined[feature] = le.fit_transform(df_combined[feature])
+        encoding_dict[feature] = {label: encoding for label, encoding in zip(le.classes_, le.transform(le.classes_))}
+
+    # エンコーディング辞書をテキストファイルに書き出す
+    with open('house_encoding.txt', 'w') as f:
+        for feature, encoding_map in encoding_dict.items():
+            f.write(f"{feature}:\n")
+            for label, encoding in encoding_map.items():
+                f.write(f"  {label}: {encoding}\n")
+
     df_combined[feature] = le.fit_transform(df_combined[feature])
+    
+
 
 # エンコーディングとスケーリング後のデータを確認
 print("ファイル出力：開始")
