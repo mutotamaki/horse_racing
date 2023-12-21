@@ -65,18 +65,15 @@ new_data.drop(['year', 'month', 'day'], axis=1, inplace=True)
 
 # カテゴリカル変数のエンコーディング
 categorical_features = ['馬', '騎手', 'レース名','場名','開催', '騎手1', '騎手2', '騎手3', '騎手4', '騎手5']  # カテゴリカル変数の列名を指定してください
+# LabelEncoderの辞書を作成
 encoding_dict = {}
 
 # ラベルエンコーディング
 for i, feature in enumerate(categorical_features):
     print(f"\rProcessing feature {i+1}/{len(categorical_features)}", end="")
     le = LabelEncoder()
-    # LabelEncoderの辞書を作成
-    
-    for feature in categorical_features:
-        le = LabelEncoder()
-        new_data[feature] = le.fit_transform(new_data[feature])
-        encoding_dict[feature] = {label: encoding for label, encoding in zip(le.classes_, le.transform(le.classes_))}
+    new_data[feature] = le.fit_transform(new_data[feature])
+    encoding_dict[feature] = {label: encoding for label, encoding in zip(le.classes_, le.transform(le.classes_))}
 
     # エンコーディング辞書をテキストファイルに書き出す
     with open('encoding.txt', 'w') as f:
